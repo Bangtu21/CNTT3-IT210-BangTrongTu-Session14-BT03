@@ -1,0 +1,14 @@
+Session14-BT03-Phần 1
+- Phân tích bài toán (I/O): Định nghĩa rõ dữ liệu đầu vào (Input) và kết quả mong đợi (Output):
+	+ Input: productId
+		 quantity 
+		 request từ nhiều user cùng lúc
+	+ Output: Thành công → tạo Order + trừ stock
+		  Thất bại → “Hết hàng” hoặc “Thử lại sau”
+
+- Đề xuất giải pháp: Trình bày ý tưởng để ngăn chặn việc bán lố: Sử dụng @Version để Optimistic Lock
+	+ Hibernate sẽ kiểm tra: Nếu có người khác update trước → throw exception
+
+- Thiết kế các bước: gạch đầu dòng tuần tự các bước từ lúc bắt đầu Transaction đến khi kết thúc
+	Bắt đầu transaction -> Lấy Product -> Kiểm tra stock -> Nếu hết -> throw
+							     -> Nếu còn -> trừ stock -> Tạo Order -> Commit -> Nếu conflict -> rollback + báo lỗi
